@@ -43,7 +43,7 @@ const (
 	DirectionHorizontal
 )
 
-func NewLayout(constraints ...Constraint) Layout {
+func New(constraints ...Constraint) Layout {
 	return Layout{
 		Direction:   DirectionVertical,
 		Constraints: constraints,
@@ -247,8 +247,8 @@ func configureFillConstraints(
 		s := segments[i]
 
 		switch c.(type) {
-		case ConstraintFill, ConstraintMin:
-			if _, ok := c.(ConstraintMin); ok && flex == FlexLegacy {
+		case Fill, Min:
+			if _, ok := c.(Min); ok && flex == FlexLegacy {
 				continue
 			}
 
@@ -274,13 +274,13 @@ func configureFillConstraints(
 			var scalingFactor float64
 
 			switch c := c.(type) {
-			case ConstraintFill:
+			case Fill:
 				scale := float64(c)
 
 				scalingFactor = 1e-6
 				scalingFactor = max(scalingFactor, scale)
 
-			case ConstraintMin:
+			case Min:
 				scalingFactor = 1
 			}
 
@@ -314,7 +314,7 @@ func configureConstraints(
 		segment := segments[i]
 
 		switch constraint := constraint.(type) {
-		case ConstraintMax:
+		case Max:
 			size := int(constraint)
 
 			err := solver.AddConstraints(
@@ -325,7 +325,7 @@ func configureConstraints(
 				return fmt.Errorf("add constraints: %w", err)
 			}
 
-		case ConstraintMin:
+		case Min:
 			size := int(constraint)
 
 			if err := solver.AddConstraint(segment.hasMinSize(size, _minSizeGTE)); err != nil {
@@ -342,28 +342,28 @@ func configureConstraints(
 				}
 			}
 
-		case ConstraintLen:
+		case Len:
 			length := int(constraint)
 
 			if err := solver.AddConstraint(segment.hasIntSize(length, _lengthSizeEq)); err != nil {
 				return fmt.Errorf("add has int size constraint: %w", err)
 			}
 
-		case ConstraintPercentage:
+		case Percentage:
 			size := area.size().MulConstant(float64(constraint)).DivConstant(100)
 
 			if err := solver.AddConstraint(segment.hasSize(size, _percentageSizeEq)); err != nil {
 				return fmt.Errorf("add has size constraint: %w", err)
 			}
 
-		case ConstraintRatio:
+		case Ratio:
 			size := area.size().MulConstant(float64(constraint.Num)).DivConstant(float64(max(1, constraint.Den)))
 
 			if err := solver.AddConstraint(segment.hasSize(size, _ratioSizeEq)); err != nil {
 				return fmt.Errorf("add has size constraint: %w", err)
 			}
 
-		case ConstraintFill:
+		case Fill:
 			if err := solver.AddConstraint(segment.hasSize(area.size(), _fillGrow)); err != nil {
 				return fmt.Errorf("add has size constraint: %w", err)
 			}
@@ -404,6 +404,7 @@ func configureFlexConstraints(
 				return fmt.Errorf("add constraints: %w", err)
 			}
 		}
+
 	case FlexSpaceAround:
 		if len(spacersExceptFirstAndLast) >= 2 {
 			for _, indices := range combinations(len(spacersExceptFirstAndLast), 2) {
@@ -460,6 +461,7 @@ func configureFlexConstraints(
 			}
 
 		}
+
 	case FlexStart:
 		for _, s := range spacersExceptFirstAndLast {
 			if err := solver.AddConstraint(s.hasSize(casso.NewExpressionFromConstant(spacingF), _spacerSizeEq)); err != nil {
@@ -501,6 +503,7 @@ func configureFlexConstraints(
 				return fmt.Errorf("add constraints: %w", err)
 			}
 		}
+
 	case FlexEnd:
 		for _, s := range spacersExceptFirstAndLast {
 			if err := solver.AddConstraint(s.hasSize(casso.NewExpressionFromConstant(spacingF), _spacerSizeEq)); err != nil {

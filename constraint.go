@@ -9,28 +9,28 @@ type Constraint interface {
 }
 
 type (
-	ConstraintMin        int
-	ConstraintMax        int
-	ConstraintLen        int
-	ConstraintPercentage int
-	ConstraintRatio      struct{ Num, Den int }
-	ConstraintFill       int
+	Min        int
+	Max        int
+	Len        int
+	Percentage int
+	Ratio      struct{ Num, Den int }
+	Fill       int
 )
 
-func (m ConstraintMin) String() string { return fmt.Sprintf("Min(%d)", m) }
-func (ConstraintMin) isConstraint()    {}
+func (m Min) String() string { return fmt.Sprintf("Min(%d)", m) }
+func (Min) isConstraint()    {}
 
-func (m ConstraintMax) String() string { return fmt.Sprintf("Max(%d)", m) }
-func (ConstraintMax) isConstraint()    {}
+func (m Max) String() string { return fmt.Sprintf("Max(%d)", m) }
+func (Max) isConstraint()    {}
 
-func (l ConstraintLen) String() string { return fmt.Sprintf("Len(%d)", l) }
-func (ConstraintLen) isConstraint()    {}
+func (l Len) String() string { return fmt.Sprintf("Len(%d)", l) }
+func (Len) isConstraint()    {}
 
-func (p ConstraintPercentage) String() string { return fmt.Sprintf("Percentage(%d)", p) }
-func (ConstraintPercentage) isConstraint()    {}
+func (p Percentage) String() string { return fmt.Sprintf("Percentage(%d)", p) }
+func (Percentage) isConstraint()    {}
 
-func (r ConstraintRatio) String() string { return fmt.Sprintf("Ratio(%d / %d)", r.Num, r.Den) }
-func (ConstraintRatio) isConstraint()    {}
+func (r Ratio) String() string { return fmt.Sprintf("Ratio(%d / %d)", r.Num, r.Den) }
+func (Ratio) isConstraint()    {}
 
-func (f ConstraintFill) String() string { return fmt.Sprintf("Fill(%d)", f) }
-func (ConstraintFill) isConstraint()    {}
+func (f Fill) String() string { return fmt.Sprintf("Fill(%d)", f) }
+func (Fill) isConstraint()    {}
