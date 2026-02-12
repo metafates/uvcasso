@@ -23,7 +23,7 @@ const (
 	RelationOperatorGreaterThanEqual
 )
 
-var _variableID = atomic.Uint64{}
+var _variableID atomic.Uint64
 
 type Variable uint64
 

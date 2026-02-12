@@ -121,6 +121,7 @@ func (l Layout) split(area uv.Rectangle) (segments, spacers []uv.Rectangle, err 
 	case DirectionHorizontal:
 		areaStart = float64(innerArea.Min.X) * _floatPrecisionMultiplier
 		areaEnd = float64(innerArea.Max.X) * _floatPrecisionMultiplier
+
 	case DirectionVertical:
 		areaStart = float64(innerArea.Min.Y) * _floatPrecisionMultiplier
 		areaEnd = float64(innerArea.Max.Y) * _floatPrecisionMultiplier
@@ -141,6 +142,7 @@ func (l Layout) split(area uv.Rectangle) (segments, spacers []uv.Rectangle, err 
 	switch s := l.Spacing.(type) {
 	case SpacingSpace:
 		spacing = int(s)
+
 	case SpacingOverlap:
 		spacing = -int(s)
 	}
