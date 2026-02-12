@@ -1193,17 +1193,12 @@ func TestFlexConstraint(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			rect := uv.Rect(0, 0, 100, 1)
-			// rect := Rect{
-			// 	Width:  100,
-			// 	Height: 1,
-			// }
 
-			rects := New(tc.constraints...).Horizontal().WithFlex(tc.flex).Split(rect)
+			rects := Horizontal(tc.constraints...).WithFlex(tc.flex).Split(rect)
 
 			ranges := make([][]int, 0, len(rects))
 
 			for _, r := range rects {
-				// ranges = append(ranges, []int{r.Left(), r.Right()})
 				ranges = append(ranges, []int{r.Min.X, r.Max.X})
 			}
 

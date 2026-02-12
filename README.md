@@ -16,12 +16,11 @@ func display(s *uv.TerminalScreen) {
 
 	var top, bottom uv.Rectangle
 
-	uvcasso.New(
+	uvcasso.Vertical(
 		uvcasso.Fill(1),
 		uvcasso.Len(1),
 		uvcasso.Len(3),
 	).
-		Vertical().
 		Split(s.Bounds()).
 		Assign(&top, nil, &bottom)
 

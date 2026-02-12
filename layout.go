@@ -43,9 +43,17 @@ const (
 	DirectionHorizontal
 )
 
-func New(constraints ...Constraint) Layout {
+func Vertical(constraints ...Constraint) Layout {
+	return New(DirectionVertical, constraints...)
+}
+
+func Horizontal(constraints ...Constraint) Layout {
+	return New(DirectionHorizontal, constraints...)
+}
+
+func New(direction Direction, constraints ...Constraint) Layout {
 	return Layout{
-		Direction:   DirectionVertical,
+		Direction:   direction,
 		Constraints: constraints,
 		Padding:     NewPadding(),
 		Flex:        FlexLegacy,
@@ -59,14 +67,6 @@ type Layout struct {
 	Padding     Padding
 	Spacing     Spacing
 	Flex        Flex
-}
-
-func (l Layout) Vertical() Layout {
-	return l.WithDirection(DirectionVertical)
-}
-
-func (l Layout) Horizontal() Layout {
-	return l.WithDirection(DirectionHorizontal)
 }
 
 func (l Layout) WithDirection(direction Direction) Layout {
