@@ -11,10 +11,10 @@ import (
 const _floatPrecisionMultiplier float64 = 100.0
 
 const (
-	_spacerSizeEq     casso.Strength = casso.Required / 10.0
-	_minSizeGTE       casso.Strength = casso.Strong * 100.0
-	_maxSizeLTE       casso.Strength = casso.Strong * 100.0
-	_minSizeLTE       casso.Strength = casso.Strong * 100.0
+	_spacerSizeEq casso.Strength = casso.Required / 10.0
+	_minSizeGTE   casso.Strength = casso.Strong * 100.0
+	_maxSizeLTE   casso.Strength = casso.Strong * 100.0
+	// _minSizeLTE       casso.Strength = casso.Strong * 100.0
 	_lengthSizeEq     casso.Strength = casso.Strong * 10.0
 	_percentageSizeEq casso.Strength = casso.Strong
 	_ratioSizeEq      casso.Strength = casso.Strong / 10.0
@@ -36,22 +36,6 @@ func (s Splitted) Assign(areas ...*uv.Rectangle) {
 	}
 }
 
-func (s Splitted) Unwrap() uv.Rectangle {
-	return s[0]
-}
-
-func (s Splitted) Unwrap2() (a, b uv.Rectangle) {
-	return s[0], s[1]
-}
-
-func (s Splitted) Unwrap3() (a, b, c uv.Rectangle) {
-	return s[0], s[1], s[2]
-}
-
-func (s Splitted) Unwrap4() (a, b, c, d uv.Rectangle) {
-	return s[0], s[1], s[2], s[3]
-}
-
 type Direction int
 
 const (
@@ -63,7 +47,7 @@ func NewLayout(constraints ...Constraint) Layout {
 	return Layout{
 		Direction:   DirectionVertical,
 		Constraints: constraints,
-		Padding:     0,
+		Padding:     NewPadding(),
 		Flex:        FlexLegacy,
 		Spacing:     SpacingSpace(0),
 	}
@@ -72,7 +56,7 @@ func NewLayout(constraints ...Constraint) Layout {
 type Layout struct {
 	Direction   Direction
 	Constraints []Constraint
-	Padding     int
+	Padding     Padding
 	Spacing     Spacing
 	Flex        Flex
 }
@@ -87,13 +71,14 @@ func (l Layout) Horizontal() Layout {
 
 func (l Layout) WithDirection(direction Direction) Layout {
 	l.Direction = direction
+
 	return l
 }
 
-// func (l Layout) WithPadding(padding Padding) Layout {
-// 	l.Padding = padding
-// 	return l
-// }
+func (l Layout) WithPadding(padding Padding) Layout {
+	l.Padding = padding
+	return l
+}
 
 func (l Layout) WithFlex(flex Flex) Layout {
 	l.Flex = flex
@@ -128,7 +113,7 @@ func (l Layout) Split(area uv.Rectangle) Splitted {
 func (l Layout) split(area uv.Rectangle) (segments, spacers []uv.Rectangle, err error) {
 	solver := casso.NewSolver()
 
-	innerArea := area.Inset(l.Padding)
+	innerArea := l.Padding.Apply(area)
 
 	var areaStart, areaEnd float64
 
