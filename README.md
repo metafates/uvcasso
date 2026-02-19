@@ -1,3 +1,8 @@
+> [!NOTE]
+> This code is now a part of [charmbracelet/ultraviolet].
+
+---
+
 # 🏗️ uvcasso
 
 Layout splitting for [charmbracelet/ultraviolet]
